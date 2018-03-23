@@ -1,6 +1,6 @@
 Hidden Markov Model Tagger using the Viterbi Algorithm:
 
-Takes sentences as input and determines the most likely tag sequence using a machine learning based language classifier.
+Takes sentences as input and determines the most likely part of speech tag sequence using a machine learning based language classifier.
 
 4_1.py: Takes data from ner_train.dat and replaces infrequent words with a new class called "_RARE_", to improve future tagging. Creates ner_train_RARE.dat, a new version of ner_train.dat but with infrequent words replaced with "_RARE_"
 
