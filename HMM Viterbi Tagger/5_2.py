@@ -8,20 +8,16 @@ import math
 def get_emission_count(emission_dict, labels_dict, word, label):
     numerator = 0
     denominator = 0
-
     if (word, label) in emission_dict:
         numerator = emission_dict[(word,label)]
-
     denominator = labels_dict[label]
-
+    
     return numerator/denominator
 
 
 
 
 if __name__ == "__main__":
-
-
     emission_dict = {} # dictionary of number of instances of word/label combo
     word_dict = {} # dictionary of words
     labels_dict = {} # dictionary of labels: count of label in training set
