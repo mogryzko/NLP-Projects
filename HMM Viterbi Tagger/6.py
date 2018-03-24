@@ -3,6 +3,7 @@
 
 import math
 
+# is the word a number?
 def is_number(s):
     try:
         int(s)
@@ -14,10 +15,8 @@ def is_number(s):
 def get_emission_count(emission_dict, labels_dict, word, label):
     numerator = 0
     denominator = 0
-
     if (word, label) in emission_dict:
         numerator = emission_dict[(word,label)]
-
     denominator = labels_dict[label]
 
     return numerator/denominator
@@ -100,11 +99,9 @@ if __name__ == "__main__":
     testfile = open('ner_dev.dat', 'r')
     file_to_write = open('6.txt', 'w')
     sentence = []
-
     for line in testfile:
         word = line.strip("\n")
         sentence.append(word)
-
         if not word: # if it is a blank line, representing end of sentence
             # perform viterbi on the sentence
             sentence_length = len(sentence) - 1
@@ -112,7 +109,7 @@ if __name__ == "__main__":
             bp = {}
             for k in range(1, sentence_length + 1): # For k = i..n
                 pi[(0,'*','*')] = 1
-
+                
                 Sk_2 = ['*']
                 Sk_1 = ['*']
                 Sk = labels_list
@@ -193,7 +190,7 @@ if __name__ == "__main__":
                 counter = counter + 1
 
 
-            # write to new file 5_2 the current word, label, then pi probability
+            # write to new file 5_2 the current word, label, then log probability
 
             file_to_write.write('\n')
             sentence = [] # then reset sentence to add new one
