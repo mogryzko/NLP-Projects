@@ -1,25 +1,8 @@
-Max Ogryzko
-mvo2102
-NLP HW 2
+Grammar Tagger using Cocke–Younger–Kasami (CYK) algorithm
 
+Learns from dataset of grammars (parse_train.dat) and finds most likely grammar tag sequence for test data (parse_dev.dat).
 
-	Q5
-
-Runtime: 103 seconds
-Precision: 0.714
-Recall: 0.714
-F Score: = 0.714
-
-Observations: I noticed that for S, my precision, recall, and f1score were 0.626, 0.782, and 0.695 respectively.
-It is interesting that the tagger does not really know if a group of words is a sentence or not, and makes me think
-that this form of AI is not very "intelligent".
-
-	Q6 
-
-Runtime: 128 seconds
-Precision: 0.742
-Recall: 0.742
-F Score: 0.742
-
-Observations: Here the precision, fscore, and recall were 0.704, 0.814, and 0.755. I think this shows that vertical
-markovization makes this model more "intelligent".
+4.py: finds rare words in training data and replaces them with RARE. Output file: parse_train.RARE.dat
+5.py: First implimentation of CYK algorithm. Prediction file outputted: q5_prediction_file. Results: q5_eval.txt
+6.py: Improved implimentation of CYK algorithm, with faster speed and use of vertical markovization techniques.
+      Prediciton file outputted: 
