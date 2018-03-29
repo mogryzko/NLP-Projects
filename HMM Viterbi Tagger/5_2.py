@@ -133,7 +133,6 @@ if __name__ == "__main__":
             # then write into new file
             for counter in range(0, len(sentence)-1):
                 file_to_write.write(sentence[counter] + ' ' + labels_tagged[counter] + ' ' + str(pi_values[counter]) + '\n')
-                counter = counter + 1
             file_to_write.write('\n')
             sentence = []  # then reset sentence to perform viterbi on next one in test set
 
