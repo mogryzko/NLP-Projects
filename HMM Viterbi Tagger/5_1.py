@@ -3,13 +3,11 @@
 
 import math
 
-
+# find probability of a trigram occuring in test data
 def trigram_prob(labels):
     file = open('ner_rare.counts', 'r')
-
     numerator = 0
     denominator = 0
-
     for line in file:
         words = line.strip("\n").split(" ")
         if words[1] == '3-GRAM':
@@ -18,7 +16,6 @@ def trigram_prob(labels):
         if words[1] == '2-GRAM':
             if (words[2] == labels[0]) and (words[3] == labels[1]):
                 denominator = int(words[0])
-
     file.close()
     return numerator/denominator
 
@@ -27,7 +24,7 @@ if __name__ == "__main__":
 
     file = open('trigrams.txt', 'r')
     newfile = open('5_1.txt', 'w')
-
+    # calculate trigram probability and write to new file
     for line in file:
         words = line.strip("\n").split(" ")
         newfile.write(words[0] + ' ' + words[1] + ' ' + words[2] + ' ')
