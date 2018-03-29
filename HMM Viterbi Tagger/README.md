@@ -10,4 +10,22 @@ Takes sentences as input and determines the most likely part of speech tag seque
 
 5_2.py: Tags words like in 4_2.py, but much more accurately using the Viterbi Algorithm
 
-6.py: Improvements to the Viterbi tagger from 5_2.py
+
+To see results of this project, execute the following commands (in order listed):
+
+python 4_1.py
+
+python 4_2.py
+
+python eval_ne_tagger.py ner_dev.key 4_2.txt
+      Will print out the results of a basic tagger on the test dataset
+      
+python 5_1.py
+
+python 5_2.py
+
+python eval_ne_tagger.py ner_dev.key 5_2.txt
+      Will print out the improved results on the test dataset with the viterbi tagger
+
+
+Project written in python 3.6.3, so it may be necessary to replace "python" in the above commands with "python3"
