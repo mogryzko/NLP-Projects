@@ -1,27 +1,28 @@
 # CKY algorithm
-# author Max Ogryzko mvo2102
+# author: Max Ogryzko mvo2102
 
 
+import sys, json, os, math, time
+
+binaryCounts = {} # {trigram: count}
+unaryCounts = {} # {unigram: count}
+symbolCount = {} # {nonterminal: count}
+trigrams = {} # {nonterminal: [trigram1,trigram2,...]}
+seenWords = [] # [word1, word2, ...]
+binarySymbols = [] # [nonterminals seen in binary rules]
+unarySymbols = [] # [nonterminals seen in unary rules]
 
 
-import sys, json, time
-
-binaryCounts = {}
-unaryCounts = {}
-symbolCount = {}
-seenWords = []
-binarySymbols = []
-unarySymbols = []
-
-
-
+# find trigram probability
 def qBinary(X, Y1, Y2):
     prob = binaryCounts[(X,Y1,Y2)]/symbolCount[X]
     return prob
 
+# find unigram probability
 def qUnary(X, w):
     prob = unaryCounts[(X,w)]/symbolCount[X]
     return prob
+
 
 # create tree in json format using back pointers
 def createTree(i, j, X, tree, words):
@@ -37,6 +38,24 @@ def createTree(i, j, X, tree, words):
         createTree(right[0], right[1], right[2], tree[2], words)
     return tree
 
+# initialize dynamic programming table
+def initializePi(words):
+    # fill dictionary with 0's
+    for l in range(1, len(words) + 1):
+        for i in range(1, len(words) + 2 - l):
+            j = i + l - 1
+            for X in symbolCount:
+                pi[(i, j, X)] = 0
+
+    # initialize base values
+    for X in unarySymbols:
+        for i in range(1, len(words) + 1):
+            if words[i - 1] in seenWords:
+                if (X, words[i - 1]) in unaryCounts:
+                    pi[(i, i, X)] = qUnary(X, words[i - 1])
+            else:
+                if (X, '_RARE_') in unaryCounts:
+                    pi[(i, i, X)] = qUnary(X, '_RARE_')
 
 
 # perform CKY algorithm to choose best tree and then return the tree in json format
@@ -45,39 +64,21 @@ def CKY(words):
     pi = {}
     global bp
     bp = {}
-    # CYK algorithm:
+    # Initialize Pi dictionary
+    initializePi(words)
 
-    # initialization
-    for X in symbolCount:
-        for i in range(1, len(words)+1):
-            if words[i-1] in seenWords:
-                if (X, words[i-1]) in unaryCounts:
-                    pi[(i, i, X)] = qUnary(X, words[i-1])
-                else:
-                    pi[(i, i, X)] = 0.0
-            else:
-                if (X, '_RARE_') in unaryCounts:
-                    pi[(i, i, X)] = qUnary(X, '_RARE_')
-                else:
-                    pi[(i, i, X)] = 0.0
-
-    # algorithm
+    # CYK algorithm
     for l in range(1, len(words)):
         for i in range(1, len(words) + 1 - l):
             j = i+l
             for X in binarySymbols:
-                trigrams = [k for k in binaryCounts if k[0] == X]
-                for t in trigrams:
-                    for s in range(i,j):
-                        val = qBinary(t[0], t[1], t[2]) * pi.setdefault((i, s, t[1]), 0) \
-                              * pi.setdefault((s + 1, j, t[2]), 0)
-                        if (i, j, X) in pi:
+                for t in trigrams[X]:
+                    if t[0] == X:
+                        for s in range(i,j):
+                            val = qBinary(t[0], t[1], t[2]) * pi[(i, s, t[1])] * pi[(s + 1, j, t[2])]
                             if pi[(i, j, X)] < val:
                                 pi[(i, j, X)] = val
                                 bp[(i, j, X)] = ((i, s, t[1]), (s + 1, j, t[2]))
-                        else:
-                            pi[(i, j, X)] = val
-                            bp[(i, j, X)] = ((i, s, t[1]), (s + 1, j, t[2]))
 
     # return tree:
     tree = []
@@ -95,9 +96,8 @@ def CKY(words):
     return tree
 
 
-
-# counts symbols, unary and binary rules and adds them to their respective global dictionaries
-def fillDicts(openCounts):
+# counts symbols, unary and binary rules and adds them to their respective global objects
+def fillObjects(openCounts):
     for l in openCounts:
         words = l.split()
         symbol = words[2]
@@ -109,6 +109,8 @@ def fillDicts(openCounts):
             y1, y2 = (words[3], words[4])
             key = (symbol, y1, y2)
             binaryCounts[key] = float(words[0])
+            trigrams.setdefault(symbol, [key])
+            trigrams[symbol] += [key]
             if symbol not in binarySymbols:
                 binarySymbols.append(symbol)
         elif words[1] == "UNARYRULE":
@@ -122,20 +124,20 @@ def fillDicts(openCounts):
                 unarySymbols.append(symbol)
 
 
-
 def main(trainFile, testFile, outputFile):
     openCounts = open('cfg.counts', 'r')
-    fillDicts(openCounts) # fill global dictionaries
+    fillObjects(openCounts) # fill global dictionaries
     openCounts.close()
     output = open(outputFile, 'w')
     for s in open(testFile, 'r'):
         words = s.split()
-        tree = CKY(words)# perform cky
-        output.write(json.dumps(tree) + '\n')# write to new file
+        tree = CKY(words)
+        output.write(json.dumps(tree) + '\n')
     output.close()
 
 
 if __name__ == "__main__":
+
     if len(sys.argv) != 4:
         print "Incorrect number of arguments"
         sys.exit(1)
