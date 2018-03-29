@@ -24,7 +24,7 @@ def qUnary(X, w):
     return prob
 
 
-# create tree in json format using back pointers
+# recursively create tree in json format using back pointers
 def createTree(i, j, X, tree, words):
     tree.append(X)
     if i == j:
@@ -82,9 +82,9 @@ def CKY(words):
 
     # return tree:
     tree = []
-    if pi[(1,len(words),'S')] != 0: # normal, full tree
+    if pi[(1,len(words),'S')] != 0: # it is a normal, full tree
         tree = createTree(1,len(words),'S',tree,words)
-    else: # max of all X in N
+    else: # it is a tree segment
         val = float("-inf")
         symbol = ''
         for X in symbolCount:
@@ -92,7 +92,7 @@ def CKY(words):
                 if val < pi[(1,len(words), X)]:
                     val = pi[(1,len(words), X)]
                     symbol = X
-        createTree(1,len(words),symbol,tree,words)
+        tree = createTree(1,len(words),symbol,tree,words)
     return tree
 
 
@@ -105,7 +105,7 @@ def fillObjects(openCounts):
             # count nonterminal symbols (not words)
             symbolCount[symbol] = float(words[0])
         if words[1] == "BINARYRULE":
-            # It is a binary rule.
+            # We are looking at a binary rule.
             y1, y2 = (words[3], words[4])
             key = (symbol, y1, y2)
             binaryCounts[key] = float(words[0])
@@ -114,7 +114,7 @@ def fillObjects(openCounts):
             if symbol not in binarySymbols:
                 binarySymbols.append(symbol)
         elif words[1] == "UNARYRULE":
-            # It is a unary rule.
+            # We are looking at a unary rule.
             y1 = words[3]
             if words[3] not in seenWords:
                 seenWords.append(words[3])
