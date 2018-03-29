@@ -19,6 +19,7 @@ def get_emission_count(emission_dict, labels_dict, word, label):
     denominator = labels_dict[label]
 
     return numerator / denominator
+
 # fills all dictionaries with training data, to be used later by viterbi algorithm
 def fillDicts(rare_wordcounts, trigram_file):
     for line in rare_wordcounts:
@@ -70,8 +71,7 @@ def viterbi(sentence):
                     if pi[(k, u, v)] < curr_pi_val:
                         pi[(k, u, v)] = curr_pi_val
                         bp[(k, u, v)] = w
-
-    # find (yn-1 yn argmax u,v)
+    # find most likely tags (u,v) for end of sentence
     pi_max = float('-inf')
     u_max_label = ''
     v_max_label = ''
@@ -86,7 +86,7 @@ def viterbi(sentence):
                 u_max_label = u
                 v_max_label = v
 
-    # Backtrack and find most likely tags
+    # Backtrack and find most likely tags for rest of sentence
     labels_tagged = [u_max_label, v_max_label]
     counter = sentence_length - 2
     while counter > 0:
