@@ -19,7 +19,7 @@ def get_emission_count(emission_dict, labels_dict, word, label):
     denominator = labels_dict[label]
 
     return numerator / denominator
-
+# fills all dictionaries with training data, to be used later by viterbi algorithm
 def fillDicts(rare_wordcounts, trigram_file):
     for line in rare_wordcounts:
         words = line.strip("\n").split(" ")
