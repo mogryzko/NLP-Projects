@@ -22,13 +22,15 @@ python 4_1.py
 python 4_2.py
 
 python eval_ne_tagger.py ner_dev.key 4_2.txt
-      \nWill print out the results of a basic tagger on the test dataset
+      
+      Will print out the results of a basic tagger on the test dataset
       
 python 5_1.py
 
 python 5_2.py
 
 python eval_ne_tagger.py ner_dev.key 5_2.txt
-      \nWill print out the improved results on the test dataset with the viterbi tagger
+      
+      Will print out the improved results on the test dataset with the viterbi tagger
 
 
