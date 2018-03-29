@@ -2,8 +2,6 @@
 # author: Max Ogryzko mvo2102
 
 
-
-
 import sys, json, os, math, time
 
 binaryCounts = {} # {trigram: count}
