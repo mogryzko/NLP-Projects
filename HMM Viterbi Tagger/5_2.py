@@ -131,8 +131,8 @@ if __name__ == "__main__":
         if not word:  # if it is a blank line, representing end of sentence
             labels_tagged,pi_values = viterbi(sentence) # send sentence to viterbi
             # then write into new file
-            for counter in range(0, len(sentence)-1):
-                file_to_write.write(sentence[counter] + ' ' + labels_tagged[counter] + ' ' + str(pi_values[counter]) + '\n')
+            for i in range(0, len(sentence)-1):
+                file_to_write.write(sentence[i] + ' ' + labels_tagged[i] + ' ' + str(pi_values[i]) + '\n')
             file_to_write.write('\n')
             sentence = []  # then reset sentence to perform viterbi on next one in test set
 
