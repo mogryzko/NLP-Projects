@@ -1,7 +1,7 @@
-Grammar Tagger using Cocke–Younger–Kasami (CYK) algorithm
+Grammar Tree Tagger using Cocke–Younger–Kasami (CYK) algorithm
 ---------------------------------------------------------
 
-Learns from dataset of grammars (parse_train.dat) and finds most likely grammar tag sequence for test data (parse_dev.dat). All files for this project are written in python 2.7
+Learns from dataset of grammar trees (parse_train.dat) and finds most likely grammar tree tag sequence for test data (parse_dev.dat). All files for this project are written in python 2.7
 
 ----------------------------------
 
