@@ -6,11 +6,9 @@ import math
 def get_emission_count(emission_dict, labels_dict, word, label):
     numerator = 0
     denominator = 0
-
     if (word, label) in emission_dict:
         numerator = emission_dict[(word,label)]
     denominator = labels_dict[label]
-
     return numerator/denominator
 
 def tagger(emission_dict, labels_dict, word):
@@ -37,15 +35,10 @@ if __name__ == "__main__":
         words = line.strip("\n").split(" ")
         if words[1] == 'WORDTAG':
             emission_dict[(words[3], words[2])] = int(words[0])
-            if words[3] in word_dict:
-                word_dict[words[3]] += int(words[0])
-            else:
-                word_dict[words[3]] = int(words[0])
-            if words[2] in labels_dict:
-                labels_dict[words[2]] += int(words[0])
-            else:
-                labels_dict[words[2]] = int(words[0])
-
+            word_dict.setdefault(words[3], 0)
+            word_dict[words[3]] += int(words[0])
+            labels_dict.setdefault(words[2], 0)
+            labels_dict[words[2]] += int(words[0])
     file.close()
 
     # create new file "4_2.txt" with argmax log emission estimates
